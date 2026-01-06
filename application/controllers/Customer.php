@@ -23,6 +23,7 @@ class Customer extends CI_Controller {
     public function store() {
         $data = [
             'customer_code' => $this->input->post('customer_code'),
+            'nama'         => $this->input->post('nama'),
             'email'         => $this->input->post('email'),
             'alamat'        => $this->input->post('alamat'),
             'no_telp'       => $this->input->post('no_telp')
@@ -37,6 +38,7 @@ class Customer extends CI_Controller {
     public function edit($id) {
         $data = [
             'customer_code' => $this->input->post('customer_code'),
+            'nama'         => $this->input->post('nama'),
             'email'         => $this->input->post('email'),
             'alamat'        => $this->input->post('alamat'),
             'no_telp'       => $this->input->post('no_telp')

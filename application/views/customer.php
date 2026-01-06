@@ -19,9 +19,13 @@
                         <!-- BEGIN: Modal Body -->
                         <form action="<?= base_url('customer/store') ?>" method="post">
                             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                                <div class="col-span-12 sm:col-span-6">
+                                <div class="col-span-12 sm:col-span-12">
                                     <label class="form-label">Customer Code</label>
                                     <input type="text" class="form-control" name="customer_code" placeholder="Customer Code" required>
+                                </div>
+                                <div class="col-span-12 sm:col-span-6">
+                                    <label class="form-label">Nama</label>
+                                    <input type="text" class="form-control" name="nama" placeholder="Nama" required>
                                 </div>
                                 <div class="col-span-12 sm:col-span-6">
                                     <label class="form-label">Email</label>
@@ -56,6 +60,7 @@
                 <tr>
                     <th class="whitespace-nowrap">#</th>
                     <th class="whitespace-nowrap">Customer Code</th>
+                    <th class="whitespace-nowrap">Nama</th>
                     <th class="whitespace-nowrap">Email</th>
                     <th class="whitespace-nowrap">Alamat</th>
                     <th class="whitespace-nowrap">No. Telp</th>
@@ -70,6 +75,7 @@
                 <tr>
                     <td class="whitespace-nowrap"><?= $no++ ?></td>
                     <td class="whitespace-nowrap"><?= $data->customer_code ?></td>
+                    <td class="whitespace-nowrap"><?= $data->nama ?></td>
                     <td class="whitespace-nowrap"><?= $data->email ?></td>
                     <td class="whitespace-nowrap"><?= $data->alamat ?></td>
                     <td class="whitespace-nowrap"><?= $data->no_telp ?></td>
@@ -110,9 +116,13 @@
                 <!-- BEGIN: Modal Body -->
                 <form action="<?= base_url('customer/edit/' . $data->id) ?>" method="post">
                     <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
-                        <div class="col-span-12 sm:col-span-6">
+                        <div class="col-span-12 sm:col-span-12">
                             <label class="form-label">Customer Code</label>
                             <input type="text" class="form-control" name="customer_code" value="<?= $data->customer_code ?>" readonly required>
+                        </div>
+                        <div class="col-span-12 sm:col-span-6">
+                            <label class="form-label">Nama</label>
+                            <input type="text" class="form-control" name="nama" value="<?= $data->nama ?>" required>
                         </div>
                         <div class="col-span-12 sm:col-span-6">
                             <label class="form-label">Email</label>

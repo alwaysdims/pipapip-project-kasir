@@ -72,7 +72,7 @@ $segment = $this->uri->segment(1);
                 <li>
                     <a href="<?= base_url('pengeluaran') ?>"
                        class="side-menu <?= ($segment == 'pengeluaran') ? 'side-menu--active' : '' ?>">
-                        <div class="side-menu__icon"><i data-lucide="meh"></i></div>
+                        <div class="side-menu__icon"><i data-lucide="activity"></i></div>
                         <div class="side-menu__title">Pengeluaran</div>
                     </a>
                 </li>
