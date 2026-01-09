@@ -20,10 +20,24 @@
                         <form action="<?= base_url('bahan/store') ?>" method="post">
                             <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                                 <div class="col-span-12 sm:col-span-6">
+                                    <label class="form-label">Kode SKU</label>
+                                    <input type="text" class="form-control" name="kode_bahan" placeholder="Kode SKU" required>
+                                </div>
+                                <div class="col-span-12 sm:col-span-6">
                                     <label class="form-label">Nama</label>
                                     <input type="text" class="form-control" name="nama" placeholder="Nama Bahan" required>
                                 </div>
-                                <div class="col-span-12 sm:col-span-6">
+                                <div class="col-span-12 sm:col-span-12">
+									<label class="form-label">Deskripsi</label>
+									<textarea 
+										name="deskripsi"
+										class="form-control"
+										rows="4"
+										placeholder="Masukkan deskripsi bahan..."
+										required></textarea>
+								</div>
+
+                                <div class="col-span-12 sm:col-span-12">
                                     <label class="form-label">Satuan</label>
                                     <select class="form-control" name="satuan_id" required>
                                         <option value="">Pilih Satuan</option>
@@ -55,7 +69,9 @@
             <thead>
                 <tr>
                     <th class="whitespace-nowrap">#</th>
+                    <th class="whitespace-nowrap">Kode SKU</th>
                     <th class="whitespace-nowrap">Nama</th>
+                    <th class="whitespace-nowrap">Deskripsi</th>
                     <th class="whitespace-nowrap">Satuan</th>
                     <th class="whitespace-nowrap">Action</th>
                 </tr>
@@ -70,7 +86,9 @@
                 ?>
                 <tr>
                     <td class="whitespace-nowrap"><?= $no++ ?></td>
+                    <td class="whitespace-nowrap"><?= $data->kode_bahan?></td>
                     <td class="whitespace-nowrap"><?= $data->nama ?></td>
+                    <td class="whitespace-nowrap"><?= $data->deskripsi ?></td>
                     <td class="whitespace-nowrap"><?= $data->satuan_nama ?></td>
                     <td class="whitespace-nowrap">
                         <div class="flex items-center justify-start">
@@ -110,10 +128,24 @@
                 <form action="<?= base_url('bahan/edit/' . $data->id) ?>" method="post">
                     <div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
                         <div class="col-span-12 sm:col-span-6">
+                            <label class="form-label">Kode SKU</label>
+                            <input type="text" class="form-control" name="kode_bahan" value="<?= $data->kode_bahan ?>"  required>
+                        </div>
+                        <div class="col-span-12 sm:col-span-6">
                             <label class="form-label">Nama</label>
                             <input type="text" class="form-control" name="nama" value="<?= $data->nama ?>" placeholder="Nama Bahan" required>
                         </div>
-                        <div class="col-span-12 sm:col-span-6">
+						<div class="col-span-12 sm:col-span-12">
+							<label class="form-label">Deskripsi</label>
+							<textarea 
+								name="deskripsi"
+								class="form-control"
+								rows="4"
+								placeholder="Masukkan deskripsi bahan..."
+								required><?= isset($data->deskripsi) ? htmlspecialchars($data->deskripsi) : '' ?></textarea>
+						</div>
+
+                        <div class="col-span-12 sm:col-span-12">
                             <label class="form-label">Satuan</label>
                             <select class="form-control" name="satuan_id" required>
                                 <option value="">Pilih Satuan</option>

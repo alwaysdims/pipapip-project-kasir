@@ -2,6 +2,65 @@
 <div class="content">
 	<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview"
 		class="btn btn-primary mr-1 mb-2 mt-5">Tambah transaksi</a>
+	<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#cetak-laporan_penjualan"
+		class="btn btn-primary justify-end" >Cetak laporan</a>
+
+	<!-- BEGIN: Modal Content -->
+	<div id="cetak-laporan_penjualan" class="modal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- BEGIN: Modal Header -->
+				<div class="modal-header">
+					<h2 class="font-medium text-base mr-auto">
+						Cetak laporan penjualan
+					</h2>
+				</div>
+				<!-- END: Modal Header -->
+				<!-- BEGIN: Modal Body -->
+				<form action="<?= base_url('GenerateLaporan/cetak_laporanPenjualan') ?>" target="_blank" method="POST">
+					<div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+						<div class="col-span-12 sm:col-span-6">
+							<label for="modal-form-2" class="form-label">Tanggal awal</label>
+							<input id="modal-form-2" name="tanggal_awal" type="date" class="form-control"
+								placeholder="example@gmail.com">
+						</div>
+						<div class="col-span-12 sm:col-span-6">
+							<label for="modal-form-1" class="form-label">Tanggal akhir</label>
+							<input id="modal-form-1" name="tanggal_akhir" type="date" class="form-control"
+								placeholder="example@gmail.com">
+						</div>
+						<div class="col-span-12 sm:col-span-12">
+							<div>
+								<label>Customer</label>
+								<div class="mt-2">
+									<select data-placeholder="Select customer" class="tom-select w-full tomselected"
+										id="tomselect-1" tabindex="-1" hidden="hidden" name="customer_id">
+										<?php
+										
+										echo '<option value="semua" selected="true">Semua</option>';
+										foreach($customers as $cust){
+											echo '<option value="'.$cust->id.'">'.$cust->nama.'</option>';
+										}
+										
+										?>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END: Modal Body -->
+					<!-- BEGIN: Modal Footer -->
+					<div class="modal-footer">
+						<button type="button" data-tw-dismiss="modal"
+							class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
+						<button type="submit" class="btn btn-primary w-20" >Send</button>
+					</div>
+					<!-- END: Modal Footer -->
+				</form>
+			</div>
+		</div>
+	</div>
+	<!-- END: Modal Content -->
 	<div class="grid grid-cols-12 gap-6">
 		<div id="superlarge-modal-size-preview" class="modal" tabindex="-1" aria-hidden="true">
 			<div class="modal-dialog modal-xl">
@@ -87,7 +146,7 @@
 					<td><?= $row->kode_transaksi ?></td>
 					<td><?= $row->nama_customer ?? '-' ?></td>
 					<td>Rp <?= number_format($row->total, 0, ',', '.') ?></td>
-					<td><?= date('d-m-Y H:i', strtotime($row->tanggal)) ?></td>
+					<td><?= date('D, d m Y H:i A', strtotime($row->tanggal)) ?></td>
 					<td>
 						<div class="flex items-center justify-start"> <a
 								href="<?= base_url('penjualan/detail_transaksi/'.$row->kode_transaksi) ?>"

@@ -1,6 +1,14 @@
 <?php
 defined('BASEPATH') OR exit('No direct script access allowed');
 class Penjualan extends CI_Controller {
+	public function __construct()
+    {
+        parent::__construct();
+        if (!$this->session->userdata('logged_in')) {
+			$this->session->set_flashdata('error', 'Anda harus login terlebih dahulu!');
+			redirect('auth');
+		}
+    }
 	public function index()
 	{
 		$this->db->select('
@@ -12,13 +20,14 @@ class Penjualan extends CI_Controller {
 		');
 		$this->db->from('transaksi');
 		$this->db->join('customers', 'customers.id = transaksi.customer_id', 'left');
-		$this->db->order_by('transaksi.tanggal', 'DESC');
-
+		$this->db->order_by('transaksi.tanggal', 'DESC');	
 		$penjualan = $this->db->get()->result();
+		$customers = $this->db->get('customers')->result();
 
 		$data = [
 			'title'     => 'Penjualan',
-			'penjualan' => $penjualan
+			'penjualan' => $penjualan,
+			'customers' => $customers,
 		];
 
 		$this->load->view('layouts/header', $data);
@@ -32,8 +41,11 @@ class Penjualan extends CI_Controller {
 		$this->db->select('id, nama, satuan_id');
 		$bahan = $this->db->get('bahan')->result();
 
+
 		// Ambil data temp berdasarkan user yang sedang login
 		$user_id = $this->session->userdata('user_id');
+		$customer_id = $this->uri->segment(3); 
+		
 
 		// Ambil data temp + join bahan & satuan
 		$this->db->select('temp.*, bahan.nama AS nama_bahan, satuan.nama AS nama_satuan');
@@ -41,6 +53,7 @@ class Penjualan extends CI_Controller {
 		$this->db->join('bahan', 'bahan.id = temp.bahan_id');
 		$this->db->join('satuan', 'satuan.id = bahan.satuan_id');
 		$this->db->where('temp.user_id', $user_id);
+		$this->db->where('temp.customer_id', $customer_id); // Updated to use $customer_id
 		$this->db->order_by('temp.id', 'ASC');
 		$temp = $this->db->get()->result();
 
@@ -65,6 +78,8 @@ class Penjualan extends CI_Controller {
 
 	public function addTemp()
 	{
+		
+		$customer_id = $this->input->post('customer_id');
 		$user_id = $this->session->userdata('user_id');
 
 		if (!$user_id) {
@@ -84,6 +99,7 @@ class Penjualan extends CI_Controller {
 
 		$data = [
 			'user_id'    => $user_id,
+			'customer_id'    => $customer_id,
 			'bahan_id'   => $this->input->post('bahan_id', TRUE),
 			'harga_beli' => $this->input->post('harga_beli', TRUE),
 			'harga_jual' => $this->input->post('harga_jual', TRUE),
@@ -99,6 +115,16 @@ class Penjualan extends CI_Controller {
 		}
 
 		redirect($this->agent->referrer());
+	}
+
+	public function updateTemp($id)
+	{
+		$jumlah = $this->input->post('jumlah');
+
+		$this->db->where('id', $id);
+		$this->db->update('temp', [
+			'jumlah' => $jumlah
+		]);
 	}
 
 	public function deleteTemp($id)
@@ -117,24 +143,18 @@ class Penjualan extends CI_Controller {
 
 		redirect($this->agent->referrer());
 	}
+
 	public function prosesPembayaran()
 	{
 		$user_id     = $this->input->post('user_id');
 		$customer_id = $this->input->post('customer_id');
 		$total       = $this->input->post('total');
-		$pembayaran  = $this->input->post('pembayaran');
 	
-		if (!$user_id || !$total || !$pembayaran) {
-			$this->session->set_flashdata('error', 'Data pembayaran tidak lengkap');
-			redirect($this->agent->referrer());
-		}
-	
-		if ($pembayaran < $total) {
-			$this->session->set_flashdata('error', 'Pembayaran kurang');
-			redirect($this->agent->referrer());
-		}
+		$temp = $this->db->get_where('temp', [
+			'user_id'     => $user_id,
+			'customer_id' => $customer_id
+		])->result();
 		
-		$temp = $this->db->get_where('temp', ['user_id' => $user_id])->result();
 	
 		if (empty($temp)) {
 			$this->session->set_flashdata('error', 'Tidak ada data transaksi');
@@ -171,7 +191,10 @@ class Penjualan extends CI_Controller {
 			$this->db->insert('detail_transaksi', $detail);
 		}
 	
-		$this->db->delete('temp', ['user_id' => $user_id]);
+		$this->db->delete('temp', [
+			'user_id'     => $user_id,
+			'customer_id' => $customer_id
+		]);
 	
 		// ==========================
 		// COMMIT / ROLLBACK

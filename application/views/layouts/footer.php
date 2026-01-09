@@ -3,6 +3,10 @@
 <script src="https://code.jquery.com/jquery-3.7.0.js"></script>
 <script src="https://datatables.net/legacy/v1/media/js/jquery.dataTables.js"></script>
 
+<!-- <script src="https://code.jquery.com/jquery-3.7.1.js"></script>
+<script src="https://cdn.tailwindcss.com"></script>
+<script src="https://cdn.datatables.net/2.3.6/js/dataTables.js"></script>
+<script src="https://cdn.datatables.net/2.3.6/js/dataTables.tailwindcss.js"></script> -->
 <script>
 	$('#example').DataTable();
 
@@ -11,7 +15,7 @@
 <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js">
 </script>
 <script src="https://maps.googleapis.com/maps/api/js?key=[" your-google-map-api"]&libraries=places"></script>
-<script src="<?= base_url('assets/enigma/Compiled/') ?>dist/js/app.js"></script>
+<script src="<?= base_url('assets/Enigma/Compiled/') ?>dist/js/app.js"></script>
 <!-- END: JS Assets-->
 <!-- Code injected by live-server -->
 <script>

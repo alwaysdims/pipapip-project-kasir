@@ -4,10 +4,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 class Bahan extends CI_Controller {
 
 	public function __construct()
-	{
+    { 
 		parent::__construct();
-		$this->load->library('session'); // untuk flashdata
-	}
+		if (!$this->session->userdata('logged_in')) {
+			$this->session->set_flashdata('error', 'Anda harus login terlebih dahulu!');
+			redirect('auth');
+		}
+    }
 
 	public function index()
 	{
@@ -24,7 +27,9 @@ class Bahan extends CI_Controller {
 	public function store()
 	{
 		$data = [
+			'kode_bahan' => $this->input->post('kode_bahan'),
 			'nama' => $this->input->post('nama'),
+			'deskripsi' => $this->input->post('deskripsi'),
 			'satuan_id' => $this->input->post('satuan_id')
 		];
 
@@ -37,7 +42,9 @@ class Bahan extends CI_Controller {
 	public function edit($id)
 	{
 		$data = [
+			'kode_bahan' => $this->input->post('kode_bahan'),
 			'nama' => $this->input->post('nama'),
+			'deskripsi' => $this->input->post('deskripsi'),
 			'satuan_id' => $this->input->post('satuan_id')
 		];
 

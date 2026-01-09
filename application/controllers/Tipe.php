@@ -6,8 +6,10 @@ class Tipe extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
-        // Optional: cek login jika diperlukan
-        // if (!$this->session->userdata('logged_in')) redirect('auth');
+        if (!$this->session->userdata('logged_in')) {
+			$this->session->set_flashdata('error', 'Anda harus login terlebih dahulu!');
+			redirect('auth');
+		}
     }
 
     public function index()

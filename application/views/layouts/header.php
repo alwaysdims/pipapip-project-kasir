@@ -3,17 +3,18 @@
 
 <head>
 	<meta charset="utf-8">
-	<link href="<?= base_url('assets/enigma/Compiled/') ?>dist/images/logo.svg" rel="shortcut icon">
+	<link href="<?= base_url('assets/Enigma/Compiled/') ?>dist/images/logo.svg" rel="shortcut icon">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<meta name="description"
 		content="Enigma admin is super flexible, powerful, clean & modern responsive tailwind admin template with unlimited possibilities.">
 	<meta name="keywords"
 		content="admin template, Enigma Admin Template, dashboard template, flat admin template, responsive admin template, web app">
 	<meta name="author" content="LEFT4CODE">
-	<title>Application | <?= $title ?></title> <!-- BEGIN: CSS Assets-->
-	<link rel="stylesheet" href="<?= base_url('assets/enigma/Compiled/') ?>dist/css/app.css" /> <!-- END: CSS Assets-->
+	<title>Application | <?= $title ?></title>
+	<link rel="stylesheet" href="<?= base_url('assets/Enigma/Compiled/') ?>dist/css/app.css" /> <!-- END: CSS Assets-->
 	<link rel="stylesheet" href="https://datatables.net/legacy/v1/media/css/jquery.dataTables.css">
-
+	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css"> -->
+	<!-- <link rel="stylesheet" href="https://cdn.datatables.net/2.3.6/css/dataTables.tailwindcss.css"> -->
 </head> 
 <!-- END: Head -->
 
@@ -21,7 +22,7 @@
 	<!-- BEGIN: Mobile Menu -->
 	<div class="mobile-menu md:hidden">
 		<div class="mobile-menu-bar"> <a href="" class="flex mr-auto"> <img alt="Midone - HTML Admin Template"
-					class="w-6" src="<?= base_url('assets/enigma/Compiled/') ?>dist/images/logo.svg"> </a> <a
+					class="w-6" src="<?= base_url('assets/Enigma/Compiled/') ?>dist/images/logo.svg"> </a> <a
 				href="javascript:;" class="mobile-menu-toggler"> <i data-lucide="bar-chart-2"
 					class="w-8 h-8 text-white transform -rotate-90"></i> </a> </div>
 		<div class="scrollable"> <a href="javascript:;" class="mobile-menu-toggler"> <i data-lucide="x-circle"
@@ -65,7 +66,7 @@
 		<div class="h-full flex items-center">
 			<!-- BEGIN: Logo --> <a href="" class="logo -intro-x hidden md:flex xl:w-[180px] block"> <img
 					alt="Midone - HTML Admin Template" class="logo__image w-6"
-					src="<?= base_url('assets/enigma/Compiled/') ?>dist/images/logo.svg"> <span
+					src="<?= base_url('assets/Enigma/Compiled/') ?>dist/images/logo.svg"> <span
 					class="logo__text text-white text-lg ml-3"> Enigma </span> </a> <!-- END: Logo -->
 			<!-- BEGIN: Breadcrumb -->
 			<nav aria-label="breadcrumb" class="-intro-x h-[45px] mr-auto">
@@ -79,13 +80,16 @@
 				<div class="dropdown-toggle w-8 h-8 rounded-full overflow-hidden shadow-lg image-fit zoom-in scale-110"
 					role="button" aria-expanded="false" data-tw-toggle="dropdown"> <img
 						alt="Midone - HTML Admin Template"
-						src="<?= base_url('assets/enigma/Compiled/') ?>dist/images/profile-5.jpg"> </div>
+						src="<?= base_url('assets/Enigma/Compiled/') ?>dist/images/profile-5.jpg"> </div>
 				<div class="dropdown-menu w-56">
 					<ul
 						class="dropdown-content bg-primary/80 before:block before:absolute before:bg-black before:inset-0 before:rounded-md before:z-[-1] text-white">
 						<li class="p-2">
-							<div class="font-medium">Christian Bale</div>
-							<div class="text-xs text-white/60 mt-0.5 dark:text-slate-500">Backend Engineer</div>
+							<div class="font-medium">
+								<?= $this->session->userdata('username') ?>
+							</div>
+
+							<div class="text-xs text-white/60 mt-0.5 dark:text-slate-500">Pemilik aplikasi</div>
 						</li>
 						<li>
 							<hr class="dropdown-divider border-white/[0.08]">
@@ -97,8 +101,16 @@
 						<li>
 							<hr class="dropdown-divider border-white/[0.08]">
 						</li>
-						<li> <a href="<?= base_url('auth/logout') ?>" onclick="return confirm('Yakin ingin logout?');" class="dropdown-item hover:bg-white/5"> <i data-lucide="toggle-right"
-									class="w-4 h-4 mr-2"></i> Logout </a> </li>
+						<li> 
+							<form action="<?= base_url('auth/logout') ?>" method="post"
+								onsubmit="return confirm('Yakin ingin logout?');">
+								<button type="submit"
+									class="dropdown-item hover:bg-white/5 flex items-center w-full text-left">
+									<i data-lucide="toggle-right" class="w-4 h-4 mr-2"></i>
+									Logout
+								</button>
+							</form>		
+						</li>
 					</ul>
 				</div>
 			</div> <!-- END: Account Menu -->

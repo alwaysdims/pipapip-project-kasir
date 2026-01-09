@@ -17,7 +17,7 @@ $segment = $this->uri->segment(1);
         <li>
             <a href="<?= base_url('penjualan') ?>"
                class="side-menu <?= ($segment == 'penjualan' || $segment == '') ? 'side-menu--active' : '' ?>">
-                <div class="side-menu__icon"><i data-lucide="dollar-sign"></i></div>
+                <div class="side-menu__icon"><i data-lucide="shopping-cart"></i></div>
                 <div class="side-menu__title">Penjualan</div>
             </a>
         </li>

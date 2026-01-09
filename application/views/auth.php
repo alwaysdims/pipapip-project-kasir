@@ -13,14 +13,14 @@ License: You must have a valid license purchased only from themeforest(the above
     <!-- BEGIN: Head -->
     <head>
         <meta charset="utf-8">
-        <link href="<?= base_url('assets/enigma/Compiled/') ?>dist/images/logo.svg" rel="shortcut icon">
+        <link href="<?= base_url('assets/Enigma/Compiled/') ?>dist/images/logo.svg" rel="shortcut icon">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="description" content="Enigma admin is super flexible, powerful, clean & modern responsive tailwind admin template with unlimited possibilities.">
         <meta name="keywords" content="admin template, Enigma Admin Template, dashboard template, flat admin template, responsive admin template, web app">
         <meta name="author" content="LEFT4CODE">
         <title>Login | Applikasi</title>
         <!-- BEGIN: CSS Assets-->
-        <link rel="stylesheet" href="<?= base_url('assets/enigma/Compiled/') ?>dist/css/app.css" />
+        <link rel="stylesheet" href="<?= base_url('assets/Enigma/Compiled/') ?>dist/css/app.css" />
         <!-- END: CSS Assets-->
     </head>
     <!-- END: Head -->
@@ -30,11 +30,11 @@ License: You must have a valid license purchased only from themeforest(the above
                 <!-- BEGIN: Login Info -->
                 <div class="hidden xl:flex flex-col min-h-screen">
                     <a href="" class="-intro-x flex items-center pt-5">
-                        <img alt="Midone - HTML Admin Template" class="w-6" src="<?= base_url('assets/enigma/Compiled/') ?>dist/images/logo.svg">
+                        <img alt="Midone - HTML Admin Template" class="w-6" src="<?= base_url('assets/Enigma/Compiled/') ?>dist/images/logo.svg">
                         <span class="text-white text-lg ml-3"> Enigma </span> 
                     </a>
                     <div class="my-auto">
-                        <img alt="Midone - HTML Admin Template" class="-intro-x w-1/2 -mt-16" src="<?= base_url('assets/enigma/Compiled/') ?>dist/images/illustration.svg">
+                        <img alt="Midone - HTML Admin Template" class="-intro-x w-1/2 -mt-16" src="<?= base_url('assets/Enigma/Compiled/') ?>dist/images/illustration.svg">
                         <div class="-intro-x text-white font-medium text-4xl leading-tight mt-10">
                             A few more clicks to 
                             <br>
@@ -66,7 +66,7 @@ License: You must have a valid license purchased only from themeforest(the above
         </div>
         
         <!-- BEGIN: JS Assets-->
-        <script src="<?= base_url('assets/enigma/Compiled/') ?>dist/js/app.js"></script>
+        <script src="<?= base_url('assets/Enigma/Compiled/') ?>dist/js/app.js"></script>
         <!-- END: JS Assets-->
     <!-- Code injected by live-server -->
 <script>
@@ -107,7 +107,6 @@ License: You must have a valid license purchased only from themeforest(the above
 	// ]]>
 
 </script>
-
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 

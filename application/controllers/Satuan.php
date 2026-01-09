@@ -3,10 +3,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Satuan extends CI_Controller {
 
-    public function __construct() {
+	public function __construct()
+    {
         parent::__construct();
-        $this->load->database();
-        $this->load->library('session'); // untuk flashdata
+        if (!$this->session->userdata('logged_in')) {
+			$this->session->set_flashdata('error', 'Anda harus login terlebih dahulu!');
+			redirect('auth');
+		}
     }
 
     public function index() {

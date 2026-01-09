@@ -3,12 +3,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Customer extends CI_Controller {
 
-    public function __construct() {
+	public function __construct()
+    {
         parent::__construct();
-        $this->load->database();
-        $this->load->library('session'); // untuk flashdata
+		if (!$this->session->userdata('logged_in')) {
+			$this->session->set_flashdata('error', 'Anda harus login terlebih dahulu!');
+			redirect('auth');
+		}
     }
-
     public function index() {
         $data = [
             'title' => 'Customer',
@@ -58,4 +60,22 @@ class Customer extends CI_Controller {
         $this->session->set_flashdata('success', 'Customer berhasil dihapus');
         redirect('customer');
     }
+
+	public function riwayat($id){
+		$transaksi = $this->db->from('transaksi')
+			->where('customer_id', $id)
+			->order_by('tanggal', 'DESC')
+			->get()
+			->result();
+
+		$data = [
+			'title' => 'Riwayat pembelian customer',
+			'transaksi' => $transaksi,
+		];
+
+		$this->load->view('layouts/header', $data);
+		$this->load->view('layouts/sidebar', $data);
+		$this->load->view('customer_riwayat', $data);
+		$this->load->view('layouts/footer');
+	}
 }

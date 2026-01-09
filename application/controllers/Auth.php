@@ -3,11 +3,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
 class Auth extends CI_Controller {
 
-    public function __construct() {
-        parent::__construct();
-        $this->load->database();
-        $this->load->library('session');
-    }
+	public function __construct()
+	{
+		parent::__construct();
+
+		$method = $this->router->fetch_method();
+
+		if ($this->session->userdata('logged_in') && $method !== 'logout') {
+			redirect('dashboard');
+		}
+	}
+
 
     public function index() {
         $this->load->view('auth');
@@ -42,10 +48,9 @@ class Auth extends CI_Controller {
             redirect('auth');
         }
     }
-
-    public function logout() {
-        $this->session->sess_destroy();
+	public function logout() {
+		$this->session->sess_destroy();
 		$this->session->set_flashdata('success', 'Logout berhasil!');
-        redirect('auth');
-    }
+		redirect('auth');
+	}	
 }
