@@ -14,8 +14,23 @@ class Bahan extends CI_Controller {
 
 	public function index()
 	{
+		$last = $this->db->select('id')
+                 ->order_by('id', 'DESC')
+                 ->limit(1)
+                 ->get('bahan')
+                 ->row();
+
+		$count = $last ? $last->id + 1 : 1;
+		$kode_sku = 'SKU-' . str_pad($count, 4, '0', STR_PAD_LEFT);
+
+		$this->db->select('bahan.*, satuan.nama as satuan_nama');
+		$this->db->join('satuan', 'satuan.id = bahan.satuan_id');
+		$bahans = $this->db->get('bahan')->result();
+
 		$data = [
-			'title' => 'Bahan'
+			'title' => 'Bahan',
+			'kode_sku' => $kode_sku,
+			'bahans' => $bahans,
 		];
 	
 		$this->load->view('layouts/header', $data);
@@ -29,7 +44,6 @@ class Bahan extends CI_Controller {
 		$data = [
 			'kode_bahan' => $this->input->post('kode_bahan'),
 			'nama' => $this->input->post('nama'),
-			'deskripsi' => $this->input->post('deskripsi'),
 			'satuan_id' => $this->input->post('satuan_id')
 		];
 
@@ -44,7 +58,6 @@ class Bahan extends CI_Controller {
 		$data = [
 			'kode_bahan' => $this->input->post('kode_bahan'),
 			'nama' => $this->input->post('nama'),
-			'deskripsi' => $this->input->post('deskripsi'),
 			'satuan_id' => $this->input->post('satuan_id')
 		];
 

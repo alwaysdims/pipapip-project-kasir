@@ -15,7 +15,8 @@ class Penjualan extends CI_Controller {
 			transaksi.kode_transaksi,
 			transaksi.customer_id,
 			customers.nama AS nama_customer,
-			transaksi.total,
+			transaksi.total_belanja,
+			transaksi.total_jual,
 			transaksi.tanggal
 		');
 		$this->db->from('transaksi');
@@ -58,17 +59,20 @@ class Penjualan extends CI_Controller {
 		$temp = $this->db->get()->result();
 
 		// 🔥 WAJIB: inisialisasi meskipun data kosong
-		$sub_total = 0;
+		$total_belanja = 0;
+		$total_jual = 0;
 
 		foreach ($temp as $row) {
-			$sub_total += $row->harga_jual * $row->jumlah;
+			$total_belanja += $row->harga_beli * $row->jumlah;
+			$total_jual += $row->harga_jual * $row->jumlah;
 		}
 
 		$data = [
 			'title' => 'Transaksi',
 			'bahan' => $bahan,
 			'temp' => $temp,
-			'sub_total' => $sub_total
+			'total_jual' => $total_jual,
+			'total_belanja' => $total_belanja
 		];
 		$this->load->view('layouts/header', $data);
 		$this->load->view('layouts/sidebar', $data);
@@ -103,7 +107,8 @@ class Penjualan extends CI_Controller {
 			'bahan_id'   => $this->input->post('bahan_id', TRUE),
 			'harga_beli' => $this->input->post('harga_beli', TRUE),
 			'harga_jual' => $this->input->post('harga_jual', TRUE),
-			'jumlah'     => $this->input->post('jumlah', TRUE)
+			'jumlah'     => $this->input->post('jumlah', TRUE),
+			'deskripsi'     => $this->input->post('deskripsi')
 		];
 
 		$this->db->insert('temp', $data);
@@ -117,7 +122,7 @@ class Penjualan extends CI_Controller {
 		redirect($this->agent->referrer());
 	}
 
-	public function updateTemp($id)
+	public function updateJumlahTemp($id)
 	{
 		$jumlah = $this->input->post('jumlah');
 
@@ -126,6 +131,26 @@ class Penjualan extends CI_Controller {
 			'jumlah' => $jumlah
 		]);
 	}
+
+	public function updateHargaBeliTemp($id)
+	{
+		$harga_beli = $this->input->post('harga_beli');
+
+		$this->db->where('id', $id);
+		$this->db->update('temp', [
+			'harga_beli' => $harga_beli
+		]);
+	}
+
+	public function updateHargaJualTemp($id)
+	{
+		$harga_jual = $this->input->post('harga_jual');
+	
+		$this->db->where('id', $id);
+		$this->db->update('temp', [
+			'harga_jual' => $harga_jual
+		]);
+	}	
 
 	public function deleteTemp($id)
 	{
@@ -148,7 +173,8 @@ class Penjualan extends CI_Controller {
 	{
 		$user_id     = $this->input->post('user_id');
 		$customer_id = $this->input->post('customer_id');
-		$total       = $this->input->post('total');
+		$total_belanja = $this->input->post('total_belanja');
+		$total_jual = $this->input->post('total_jual');
 	
 		$temp = $this->db->get_where('temp', [
 			'user_id'     => $user_id,
@@ -163,7 +189,7 @@ class Penjualan extends CI_Controller {
 	
 		$this->db->trans_begin();
 
-		$customer = $this->db->from('customers')->get()->row();
+		$customer = $this->db->from('customers')->where('id', $customer_id)->get()->row();
 		$random = str_pad(rand(0, 99), 2, '0', STR_PAD_LEFT);
 		$kode_transaksi = $customer->customer_code . '-' . date('YmdHis') . $random;
 		
@@ -171,7 +197,8 @@ class Penjualan extends CI_Controller {
 		$transaksi = [
 			'kode_transaksi' => $kode_transaksi,
 			'tanggal'        => date('Y-m-d H:i:s'),
-			'total'          => $total,
+			'total_belanja'  => $total_belanja,
+			'total_jual'     => $total_jual,
 			'user_id'        => $user_id,
 			'customer_id'    => $customer_id
 		];
@@ -185,7 +212,8 @@ class Penjualan extends CI_Controller {
 				'bahan_id'     => $row->bahan_id,
 				'harga_jual'   => $row->harga_jual,
 				'harga_beli'   => $row->harga_beli,
-				'jumlah'       => $row->jumlah
+				'jumlah'       => $row->jumlah,
+				'deskripsi'    => $row->deskripsi ?: 'tidak ada deskripsi',
 			];
 	
 			$this->db->insert('detail_transaksi', $detail);
@@ -234,5 +262,40 @@ class Penjualan extends CI_Controller {
 		$this->load->view('layouts/sidebar', $data);
 		$this->load->view('detail-penjualan', $data); // view yang akan kita buat
 		$this->load->view('layouts/footer', $data);
+	}
+
+	public function editDetailTransaksi($id)
+	{
+		$detailOld = $this->db->get_where('detail_transaksi', ['id' => $id])->row();
+		if (!$detailOld) {
+			$this->session->set_flashdata('error', 'Data tidak ditemukan');
+			return redirect($_SERVER['HTTP_REFERER']);
+		}
+
+		$transaksi_id = $detailOld->transaksi_id;
+
+		$dataUpdateDetail = [
+			'harga_jual' => $this->input->post('harga_jual'),
+			'harga_beli' => $this->input->post('harga_beli'),
+			'jumlah'     => $this->input->post('jumlah')
+		];
+
+		$this->db->where('id', $id);
+		$this->db->update('detail_transaksi', $dataUpdateDetail);
+
+		$this->db->select('SUM(harga_beli * jumlah) as total_beli, SUM(harga_jual * jumlah) as total_jual');
+		$this->db->where('transaksi_id', $transaksi_id);
+		$newTotals = $this->db->get('detail_transaksi')->row();
+
+		$dataUpdateTransaksi = [
+			'total_belanja' => $newTotals->total_beli,
+			'total_jual'    => $newTotals->total_jual
+		];
+
+		$this->db->where('id', $transaksi_id);
+		$this->db->update('transaksi', $dataUpdateTransaksi);
+
+		$this->session->set_flashdata('success', 'Data berhasil diperbarui');
+		redirect($_SERVER['HTTP_REFERER']);
 	}
 }

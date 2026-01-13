@@ -16,7 +16,7 @@ class Dashboard extends CI_Controller {
     {
 		$today = date('Y-m-d');
 
-        $this->db->select('SUM(total) as penjualan_hari_ini');
+        $this->db->select('SUM(total_jual) as penjualan_hari_ini');
         $this->db->from('transaksi');
         $this->db->where('DATE(tanggal)', $today);
         $query = $this->db->get();
@@ -45,7 +45,7 @@ class Dashboard extends CI_Controller {
 
 			$labels[] = date('M Y', strtotime("$tahun-$bulan-01"));
 
-			$this->db->select('SUM(total) as total_bulanan');
+			$this->db->select('SUM(total_jual) as total_bulanan');
 			$this->db->from('transaksi');
 			$this->db->where('MONTH(tanggal)', $bulan);
 			$this->db->where('YEAR(tanggal)', $tahun);
@@ -54,7 +54,7 @@ class Dashboard extends CI_Controller {
 			$values[] = $result->total_bulanan ?? 0;
 		}
 
-		$this->db->select('kode_transaksi, tanggal, total');
+		$this->db->select('kode_transaksi, tanggal, total_jual');
 		$this->db->from('transaksi');
 		$this->db->where('DATE(tanggal)', $today);
 		$this->db->order_by('tanggal', 'DESC');

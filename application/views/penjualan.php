@@ -22,12 +22,12 @@
 						<div class="col-span-12 sm:col-span-6">
 							<label for="modal-form-2" class="form-label">Tanggal awal</label>
 							<input id="modal-form-2" name="tanggal_awal" type="date" class="form-control"
-								placeholder="example@gmail.com">
+								placeholder="example@gmail.com" required>
 						</div>
 						<div class="col-span-12 sm:col-span-6">
 							<label for="modal-form-1" class="form-label">Tanggal akhir</label>
 							<input id="modal-form-1" name="tanggal_akhir" type="date" class="form-control"
-								placeholder="example@gmail.com">
+								placeholder="example@gmail.com" required>
 						</div>
 						<div class="col-span-12 sm:col-span-12">
 							<div>
@@ -132,23 +132,35 @@
 				<tr>
 					<th>#</th>
 					<th>Kode Transaksi</th>
-					<th>Customer</th>
-					<th>Total</th>
 					<th>Tanggal</th>
+					<th>Customer</th>
+					<th>Total Belanja</th>
+					<th>Total Penjualan</th>
+					<th>Margin</th>
+					<th>Presentase</th>
 					<th>Action</th>
 				</tr>
 			</thead>
 			<tbody>
-				<?php if (!empty($penjualan)) : ?>
-				<?php $no = 1; foreach ($penjualan as $row) : ?>
+				<?php $no = 1; foreach ($penjualan as $row) :
+				$laba = $row->total_jual - $row->total_belanja;
+
+				$margin = ($row->total_jual > 0)
+					? ($laba / $row->total_jual) * 100
+					: 0;
+				?>
 				<tr>
 					<td><?= $no++ ?></td>
 					<td><?= $row->kode_transaksi ?></td>
-					<td><?= $row->nama_customer ?? '-' ?></td>
-					<td>Rp <?= number_format($row->total, 0, ',', '.') ?></td>
 					<td><?= date('D, d m Y H:i A', strtotime($row->tanggal)) ?></td>
+					<td><?= $row->nama_customer ?? '-' ?></td>
+					<td>Rp <?= number_format($row->total_belanja, 0, ',', '.') ?></td>
+					<td>Rp <?= number_format($row->total_jual, 0, ',', '.') ?></td>
+					<td>Rp <?= number_format($row->total_jual - $row->total_belanja, 0, ',', '.') ?></td>
+					<td><?= number_format($margin, 2, ',', '.') ?>%</td>
 					<td>
-						<div class="flex items-center justify-start"> <a
+						<div class="flex items-center justify-start"> 
+							<a
 								href="<?= base_url('penjualan/detail_transaksi/'.$row->kode_transaksi) ?>"
 								class="flex items-center mr-3"> <svg xmlns="http://www.w3.org/2000/svg" width="24"
 									height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -156,15 +168,12 @@
 									class="lucide lucide-edit w-4 h-4 mr-1">
 									<path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path>
 									<path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path>
-								</svg> Detail </a> </div>
+								</svg> Detail 
+							</a> 
+						</div>
 					</td>
 				</tr>
 				<?php endforeach; ?>
-				<?php else : ?>
-				<tr>
-					<td colspan="6" class="text-center">Data penjualan belum ada</td>
-				</tr>
-				<?php endif; ?>
 			</tbody>
 		</table>
 	</div>

@@ -62,11 +62,15 @@ class Customer extends CI_Controller {
     }
 
 	public function riwayat($id){
-		$transaksi = $this->db->from('transaksi')
-			->where('customer_id', $id)
-			->order_by('tanggal', 'DESC')
+		$transaksi = $this->db
+			->select('transaksi.*, customers.*')
+			->from('transaksi')
+			->join('customers', 'customers.id = transaksi.customer_id', 'left')
+			->where('transaksi.customer_id', $id)
+			->order_by('transaksi.tanggal', 'DESC')
 			->get()
 			->result();
+
 
 		$data = [
 			'title' => 'Riwayat pembelian customer',
@@ -77,5 +81,31 @@ class Customer extends CI_Controller {
 		$this->load->view('layouts/sidebar', $data);
 		$this->load->view('customer_riwayat', $data);
 		$this->load->view('layouts/footer');
+	}
+
+	public function detail_riwayat($kode_transaksi){
+		// Ambil data transaksi utama
+		$transaksi = $this->db->get_where('transaksi', ['kode_transaksi' => $kode_transaksi])->row();
+		
+		if (!$transaksi) {
+			$this->session->set_flashdata('error', 'Transaksi tidak ditemukan');
+			redirect('penjualan');
+		}
+	
+		// Ambil detail dan join ke tabel bahan untuk nama barang
+		$this->db->select('dt.*, b.nama'); 
+		$this->db->from('detail_transaksi dt');
+		$this->db->join('bahan b', 'b.id = dt.bahan_id', 'left');
+		$this->db->where('dt.transaksi_id', $transaksi->id);
+		$details = $this->db->get()->result();
+	
+		$data['transaksi'] = $transaksi;
+		$data['details']   = $details;
+		$data['title']     = 'Detail Transaksi | ' . $kode_transaksi;
+	
+		$this->load->view('layouts/header', $data);
+		$this->load->view('layouts/sidebar', $data);
+		$this->load->view('detail_riwayat_customer', $data);
+		$this->load->view('layouts/footer', $data);
 	}
 }

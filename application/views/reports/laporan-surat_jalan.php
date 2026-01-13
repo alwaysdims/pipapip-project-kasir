@@ -9,12 +9,23 @@
             font-size: 12px;
             margin: 20px;
         }
-        .header {
-            text-align: center;
-            font-size: 18px;
-            font-weight: bold;
+        /* Desain Header Baru */
+        .header-table {
+            width: 100%;
+            border-bottom: 2px solid #333;
             margin-bottom: 20px;
+            padding-bottom: 10px;
         }
+        .header-title {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            text-transform: uppercase;
+        }
+        .logo-img {
+            max-height: 60px; /* Ukuran logo yang proporsional untuk surat jalan */
+        }
+        
         .info {
             width: 100%;
             margin-bottom: 20px;
@@ -66,7 +77,14 @@
 </head>
 <body>
 
-    <div class="header">Surat Jalan</div>
+    <table class="header-table">
+        <tr>
+            <td class="header-title" valign="bottom">Surat Jalan</td>
+            <td align="right" valign="top">
+                <img src="<?= base_url('assets/images/logo.jpg') ?>" class="logo-img" alt="Logo">
+            </td>
+        </tr>
+    </table>
 
     <table class="info">
         <tr>
@@ -92,7 +110,6 @@
             <tr>
                 <th style="width: 5%;">No</th>
                 <th style="width: 30%;">Nama Produk</th>
-                <th style="width: 20%;">Kode SKU</th>
                 <th style="width: 20%;">Deskripsi</th>
                 <th style="width: 10%;">Kuantitas</th>
                 <th style="width: 10%;">Unit</th>
@@ -103,18 +120,15 @@
             <tr>
                 <td class="center"><?= $no++ ?></td>
                 <td><?= $dt->nama_bahan ?></td>
-                <td class="center"><?= $dt->kode_bahan ?: '-' ?></td> <!-- jika ada kolom kode_sku -->
-                <td><?= $dt->deskripsi ?: '-' ?></td> <!-- jika ada kolom deskripsi di bahan -->
+                <td><?= $dt->deskripsi ?: '-' ?></td>
                 <td class="center"><?= $dt->jumlah ?></td>
-                <td class="center"><?= $dt->nama_satuan ?: '-' ?></td> <!-- sesuaikan jika ada kolom unit -->
+                <td class="center"><?= $dt->nama_satuan ?: '-' ?></td>
             </tr>
             <?php endforeach; ?>
             <?php 
-            // Jika data kurang dari gambar, tambahkan row kosong agar layout tetap
             for ($i = $no; $i <= 2; $i++): ?>
             <tr>
                 <td>&nbsp;</td>
-                <td></td>
                 <td></td>
                 <td></td>
                 <td></td>
@@ -124,17 +138,17 @@
         </tbody>
     </table>
 
-    <div style="margin-top: 30px;">Catatan</div>
+    <div style="margin-top: 30px; font-weight: bold; border-bottom: 1px solid #ccc; width: 60px;">Catatan : </div>
 
     <table class="footer">
         <tr>
             <td width="50%">
-                Pengirim<br><br><br><br>
-                <?= $transaksi->pengirim_username ?>
+                Pengirim<br><br><br><br><br><br>
+                <b>( <?= $transaksi->pengirim_username ?> )</b>
             </td>
             <td width="50%">
-                Penerima<br><br><br><br>
-                <?= $transaksi->nama ?>
+                Penerima<br><br><br><br><br><br>
+                <b>( <?= $transaksi->nama ?> )</b>
             </td>
         </tr>
     </table>

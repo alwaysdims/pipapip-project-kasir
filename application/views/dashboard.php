@@ -8,7 +8,7 @@
 				</h2>
 				<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#cetak-laporan_penjualan"
 					class="btn btn-primary ml-auto">
-					Cetak laporan
+					Cetak laporan penjualan
 				</a>
 
 				<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview"
@@ -32,13 +32,11 @@
 								<div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
 									<div class="col-span-12 sm:col-span-6">
 										<label for="modal-form-2" class="form-label">Tanggal awal</label>
-										<input id="modal-form-2" name="tanggal_awal" type="date" class="form-control"
-											placeholder="example@gmail.com">
+										<input id="modal-form-2" name="tanggal_awal" type="date" class="form-control" required>
 									</div>
 									<div class="col-span-12 sm:col-span-6">
 										<label for="modal-form-1" class="form-label">Tanggal akhir</label>
-										<input id="modal-form-1" name="tanggal_akhir" type="date" class="form-control"
-											placeholder="example@gmail.com">
+										<input id="modal-form-1" name="tanggal_akhir" type="date" class="form-control" required>
 									</div>
 									<div class="col-span-12 sm:col-span-12">
 										<div>
@@ -251,7 +249,7 @@
 							</div>
 
 							<div class="py-1 px-2 rounded-full text-xs bg-success text-white font-medium">
-								<?= number_format($row->total, 0, ',', '.') ?>
+								<?= number_format($row->total_jual, 0, ',', '.') ?>
 							</div>
 
 						</div>
