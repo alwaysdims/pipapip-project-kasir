@@ -17,6 +17,8 @@ class GenerateLaporan extends CI_Controller
 		$this->db->select('
 		transaksi.*,
 		customers.nama AS nama_customer,
+		customers.alamat AS alamat_customer,
+		customers.no_telp AS no_telp_customer,
 		customers.email AS email_customer,
 		users.username AS nama_user
 		');

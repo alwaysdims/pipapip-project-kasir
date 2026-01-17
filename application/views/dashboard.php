@@ -6,23 +6,75 @@
 				<h2 class="text-lg font-medium truncate mr-5">
 					General Report
 				</h2>
-				<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#cetak-laporan_penjualan"
+				<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#export-pdf"
 					class="btn btn-primary ml-auto">
-					Cetak laporan penjualan
+					Export Pdf
 				</a>
+				<a href="javascript:;" data-tw-toggle="modal"  data-tw-target="#cetak-exel" class="btn btn-primary ml-2" >Export Excel</a>
 
 				<a href="javascript:;" data-tw-toggle="modal" data-tw-target="#superlarge-modal-size-preview"
 					class="btn btn-primary ml-2">
 					Tambah transaksi
 				</a>
-
-				<div id="cetak-laporan_penjualan" class="modal" tabindex="-1" aria-hidden="true">
+				<div id="cetak-exel" class="modal" tabindex="-1" aria-hidden="true">
+		<div class="modal-dialog">
+			<div class="modal-content">
+				<!-- BEGIN: Modal Header -->
+				<div class="modal-header">
+					<h2 class="font-medium text-base mr-auto">
+						Cetak laporan penjualan ke-Excel
+					</h2>
+				</div>
+				<!-- END: Modal Header -->
+				<!-- BEGIN: Modal Body -->
+				<form action="<?= base_url('ExportExel/export') ?>" target="_blank" method="POST">
+					<div class="modal-body grid grid-cols-12 gap-4 gap-y-3">
+						<div class="col-span-12 sm:col-span-6">
+							<label for="modal-form-2" class="form-label">Tanggal awal</label>
+							<input id="modal-form-2" name="tanggal_awal" type="date" class="form-control" required>
+						</div>
+						<div class="col-span-12 sm:col-span-6">
+							<label for="modal-form-1" class="form-label">Tanggal akhir</label>
+							<input id="modal-form-1" name="tanggal_akhir" type="date" class="form-control" required>
+						</div>
+						<div class="col-span-12 sm:col-span-12">
+							<div>
+								<label>Customer</label>
+								<div class="mt-2">
+									<select data-placeholder="Select customer" class="tom-select w-full tomselected"
+										id="tomselect-1" tabindex="-1" hidden="hidden" name="customer_id">
+										<?php
+										
+										echo '<option value="semua" selected="true">Semua</option>';
+										foreach($customers as $cust){
+											echo '<option value="'.$cust->id.'">'.$cust->nama.'</option>';
+										}
+										
+										?>
+									</select>
+								</div>
+							</div>
+						</div>
+					</div>
+					<!-- END: Modal Body -->
+					<!-- BEGIN: Modal Footer -->
+					<div class="modal-footer">
+						<button type="button" data-tw-dismiss="modal"
+							class="btn btn-outline-secondary w-20 mr-1">Cancel</button>
+						<button type="submit" class="btn btn-primary w-20" >Send</button>
+					</div>
+					<!-- END: Modal Footer -->
+				</form>
+			</div>
+		</div>
+	</div>
+				<div id="export-pdf" class="modal" tabindex="-1" aria-hidden="true">
 					<div class="modal-dialog">
 						<div class="modal-content">
 							<!-- BEGIN: Modal Header -->
 							<div class="modal-header">
 								<h2 class="font-medium text-base mr-auto">
-									Cetak laporan penjualan
+									Cetak laporan penjualan ke-Pdf
 								</h2>
 							</div>
 							<!-- END: Modal Header -->

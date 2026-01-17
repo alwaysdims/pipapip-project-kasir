@@ -136,6 +136,22 @@
 								<input type="hidden" name="user_id" value="<?= $this->session->userdata('user_id') ?>"
 									id="">
 
+									<tr>
+										<td class="whitespace-nowrap" colspan="10">
+											<div class="flex flex-col gap-2">
+												<label for="catatan" class="font-medium">
+													Catatan
+												</label>
+												<textarea
+													id="catatan"
+													name="catatan"
+													rows="3"
+													class="form-control w-full"
+													placeholder="Input catatan penjualan"
+												></textarea>
+											</div>
+										</td>
+									</tr>
 								<tr>
 									<td class="whitespace-nowrap" colspan="10">
 										<button type="submit" class="btn btn-primary mt-2 w-full">Proses

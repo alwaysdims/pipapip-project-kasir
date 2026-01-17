@@ -12,12 +12,14 @@ class Penjualan extends CI_Controller {
 	public function index()
 	{
 		$this->db->select('
+			transaksi.id,
 			transaksi.kode_transaksi,
 			transaksi.customer_id,
 			customers.nama AS nama_customer,
 			transaksi.total_belanja,
 			transaksi.total_jual,
-			transaksi.tanggal
+			transaksi.tanggal,
+			transaksi.catatan,
 		');
 		$this->db->from('transaksi');
 		$this->db->join('customers', 'customers.id = transaksi.customer_id', 'left');
@@ -175,6 +177,7 @@ class Penjualan extends CI_Controller {
 		$customer_id = $this->input->post('customer_id');
 		$total_belanja = $this->input->post('total_belanja');
 		$total_jual = $this->input->post('total_jual');
+		$catatan = $this->input->post('catatan');
 	
 		$temp = $this->db->get_where('temp', [
 			'user_id'     => $user_id,
@@ -199,6 +202,7 @@ class Penjualan extends CI_Controller {
 			'tanggal'        => date('Y-m-d H:i:s'),
 			'total_belanja'  => $total_belanja,
 			'total_jual'     => $total_jual,
+			'catatan'     => $catatan ?: 'tidak ada catatan',
 			'user_id'        => $user_id,
 			'customer_id'    => $customer_id
 		];
@@ -297,5 +301,117 @@ class Penjualan extends CI_Controller {
 
 		$this->session->set_flashdata('success', 'Data berhasil diperbarui');
 		redirect($_SERVER['HTTP_REFERER']);
+	}
+
+	public function hapusDetailTransaksi($id)
+	{
+		// 1. Ambil data detail untuk mendapatkan transaksi_id
+		$detail = $this->db->get_where('detail_transaksi', ['id' => $id])->row();
+
+		if (!$detail) {
+			$this->session->set_flashdata('error', 'Data tidak ditemukan');
+			return redirect($_SERVER['HTTP_REFERER']);
+		}
+
+		$transaksi_id = $detail->transaksi_id;
+
+		// 2. Cek berapa banyak item yang ada di transaksi ini
+		$jumlah_item = $this->db->where('transaksi_id', $transaksi_id)->from('detail_transaksi')->count_all_results();
+
+		if ($jumlah_item <= 1) {
+			// OPSIONAL: Jika item terakhir dihapus, hapus juga transaksi induknya
+			// atau Anda bisa arahkan redirect ke halaman list penjualan karena detail sudah kosong
+			$this->db->delete('transaksi', ['id' => $transaksi_id]);
+			$this->db->delete('detail_transaksi', ['transaksi_id' => $transaksi_id]);
+			
+			$this->session->set_flashdata('success', 'Transaksi dihapus karena semua item telah dihapus');
+			return redirect('penjualan'); // Redirect ke list utama karena detail sudah tidak ada
+		}
+
+		// 3. Jika item lebih dari 1, hapus item tersebut
+		$this->db->delete('detail_transaksi', ['id' => $id]);
+
+		// 4. Hitung ulang total
+		$this->db->select('SUM(harga_beli * jumlah) as total_beli, SUM(harga_jual * jumlah) as total_jual');
+		$this->db->where('transaksi_id', $transaksi_id);
+		$newTotals = $this->db->get('detail_transaksi')->row();
+
+		$dataUpdateTransaksi = [
+			'total_belanja' => $newTotals->total_beli ?? 0,
+			'total_jual'    => $newTotals->total_jual ?? 0
+		];
+
+		$this->db->where('id', $transaksi_id);
+		$this->db->update('transaksi', $dataUpdateTransaksi);
+
+		$this->session->set_flashdata('success', 'Item berhasil dihapus');
+		redirect($_SERVER['HTTP_REFERER']);
+	}
+
+	public function updateTransaksi($id)
+	{
+		$tanggal_input = $this->input->post('tanggal');
+		$customer_id = $this->input->post('customer_id');
+		$catatan = $this->input->post('catatan');
+
+		// Ambil data transaksi lama
+		$transaksi_lama = $this->db->get_where('transaksi', ['id' => $id])->row();
+
+		if ($transaksi_lama) {
+			$data_update = [
+				'catatan' => $catatan,
+				'customer_id' => $customer_id
+			];
+
+			// Flag untuk mengecek apakah ada perubahan yang memicu update nota
+			$is_changed = false;
+
+			// 1. Logika Tanggal
+			if (!empty($tanggal_input)) {
+				// Jika tanggal input berbeda dengan tanggal lama (perlu update nota)
+				if (date('Y-m-d', strtotime($transaksi_lama->tanggal)) != $tanggal_input) {
+					$is_changed = true;
+				}
+				$waktu_sekarang = date('H:i:s');
+				$data_update['tanggal'] = $tanggal_input . ' ' . $waktu_sekarang;
+				$format_tgl_nota = date('Ymd', strtotime($tanggal_input));
+			} else {
+				$format_tgl_nota = date('Ymd', strtotime($transaksi_lama->tanggal));
+			}
+
+			// 2. Logika Customer
+			if ($transaksi_lama->customer_id != $customer_id) {
+				$is_changed = true;
+			}
+
+			// 3. Update Nota (Jika tanggal ATAU customer berubah)
+			if ($is_changed) {
+				$customer = $this->db->get_where('customers', ['id' => $customer_id])->row();
+				if ($customer) {
+					$parts = explode('-', $transaksi_lama->kode_transaksi);
+					$suffix = end($parts); // Ambil angka acak di belakang nota lama
+					
+					// Format Nota: KodeCustomer-YYYYMMDD-Acak
+					$data_update['kode_transaksi'] = $customer->customer_code . '-' . $suffix;
+				}
+			}
+
+			$this->db->where('id', $id);
+			$this->db->update('transaksi', $data_update);
+			$this->session->set_flashdata('success', 'Transaksi berhasil diperbarui');
+		}
+
+		redirect($_SERVER['HTTP_REFERER']);
+	}
+	
+	public function batalkanTransaksi($id)
+	{
+		// Hapus data detail transaksi terlebih dahulu (FK)
+		$this->db->delete('detail_transaksi', ['transaksi_id' => $id]);
+		// Hapus data utama
+		$this->db->delete('transaksi', ['id' => $id]);
+	
+		$this->session->set_flashdata('success', 'Transaksi berhasil dibatalkan');
+		redirect('penjualan');
 	}
 }

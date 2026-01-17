@@ -12,7 +12,25 @@
 	<meta name="author" content="LEFT4CODE">
 	<title>Application | <?= $title ?></title>
 	<link rel="stylesheet" href="<?= base_url('assets/Enigma/Compiled/') ?>dist/css/app.css" /> <!-- END: CSS Assets-->
-	<link rel="stylesheet" href="https://datatables.net/legacy/v1/media/css/jquery.dataTables.css">
+	<link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+	<style>
+		/* Memberikan padding agar angka tidak menabrak panah di Tailwind */
+		.dataTables_length select {
+			padding-right: 25px !important;
+			padding-left: 10px !important;
+			padding-top: 2px !important;
+			padding-bottom: 2px !important;
+			border-radius: 5px;
+			border: 1px solid #e2e8f0; /* Menyesuaikan border Midone */
+		}
+
+		/* Memberikan jarak antara label "Show" dan "entries" */
+		.dataTables_length label {
+			display: flex;
+			align-items: center;
+			gap: 0.5rem;
+		}
+	</style>
 	<!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.min.css"> -->
 	<!-- <link rel="stylesheet" href="https://cdn.datatables.net/2.3.6/css/dataTables.tailwindcss.css"> -->
 </head> 
