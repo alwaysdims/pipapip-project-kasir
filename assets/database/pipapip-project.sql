@@ -6,8 +6,8 @@
 /*!40101 SET @OLD_SQL_MODE=@@SQL_MODE, SQL_MODE='NO_AUTO_VALUE_ON_ZERO' */;
 /*!40111 SET @OLD_SQL_NOTES=@@SQL_NOTES, SQL_NOTES=0 */;
 
-CREATE DATABASE IF NOT EXISTS `pipapip-project`;
-USE `pipapip-project`;
+CREATE DATABASE IF NOT EXISTS `kasir`;
+USE `kasir`;
 
 -- 1. Table: satuan (Master)
 CREATE TABLE IF NOT EXISTS `satuan` (
