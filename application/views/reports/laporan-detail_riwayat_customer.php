@@ -6,20 +6,58 @@
     <style>
         body { font-family: Arial, sans-serif; font-size: 10px; color: #333; margin: 20px; }
         
-        /* Layout Header */
-        .header-table {
+       /* Header Section: Membuat Invoice info dan Logo Simetris */
+        .header-container {
+            display: table;
             width: 100%;
-            border: none;
-            margin-bottom: 20px;
+            margin-bottom: 30px;
+            border-collapse: collapse;
         }
-        .header-table td {
-            border: none;
-            padding: 0;
-            vertical-align: middle;
+
+        .header-left {
+            display: table-cell;
+            vertical-align: top;
+            text-align: left;
         }
-        
-        .invoice-title { font-size: 18px; font-weight: bold; margin: 0; }
-        .logo-img { max-height: 50px; }
+
+        .header-right {
+            display: table-cell;
+            vertical-align: top;
+            text-align: right;
+            width: 1%;
+            white-space: nowrap;
+        }
+
+        .header-left h1 {
+            margin: 0 0 10px 0;
+            font-size: 24px;
+            line-height: 1;
+            text-transform: uppercase;
+        }
+
+        .info-nota {
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        /* Menghapus border khusus untuk tabel di header */
+        .table-info-header {
+            width: auto;
+            border: none;
+            margin-top: 0;
+        }
+        .table-info-header td {
+            border: none;
+            padding: 2px 5px 2px 0;
+            vertical-align: top;
+        }
+
+        .logo {
+            height: 90px;
+            width: auto;
+            display: inline-block;
+            object-fit: contain;
+        }
         
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #ccc; padding: 6px; }
@@ -32,20 +70,51 @@
 </head>
 <body>
 
-    <table class="header-table">
-        <tr>
-            <td>
-                <div class="invoice-title">INVOICE</div>
-                <p style="margin: 5px 0 0 0;">
-                    No Nota: <b><?= $transaksi->kode_transaksi ?></b><br>
-                    Tanggal: <?= date('d M Y', strtotime($transaksi->tanggal)) ?>
-                </p>
-            </td>
-            <td class="right">
-                <img src="<?= base_url('assets/images/logo.jpg') ?>" class="logo-img" alt="Logo">
-            </td>
-        </tr>
-    </table>
+<div class="header-container">
+        <div class="header-left">
+            <h1>INVOICE</h1>
+            <div class="info-nota">
+                <?php
+        $bulan = [
+            1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni',
+            'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'
+        ];
+        $split = explode('-', date('d-m-Y', strtotime($transaksi->tanggal)));
+        $tanggal_indo = $split[0] . ' ' . $bulan[(int)$split[1]] . ' ' . $split[2];
+    ?>
+                <table class="table-info-header">
+                    <tr>
+                        <td><strong>Nomor Nota</strong></td>
+                        <td><strong>:</strong></td>
+                        <td><?= $transaksi->kode_transaksi ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Tanggal</strong></td>
+                        <td><strong>:</strong></td>
+                        <td><?= $tanggal_indo ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Pelanggan</strong></td>
+                        <td><strong>:</strong></td>
+                        <td><?= htmlspecialchars($transaksi->nama_customer) ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>No. Telp</strong></td>
+                        <td><strong>:</strong></td>
+                        <td><?= htmlspecialchars($transaksi->no_telp_customer) ?: '-' ?></td>
+                    </tr>
+                    <tr>
+                        <td><strong>Alamat</strong></td>
+                        <td><strong>:</strong></td>
+                        <td><?= htmlspecialchars($transaksi->alamat_customer) ?: '-' ?></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="header-right">
+            <img src="<?= base_url('assets/images/logo.jpg') ?>" class="logo" alt="Logo">
+        </div>
+    </div>
 
     <table>
         <thead>

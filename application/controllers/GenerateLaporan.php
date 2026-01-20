@@ -312,9 +312,18 @@ class GenerateLaporan extends CI_Controller
 
 		// Ambil data transaksi
 		$data['transaksi'] = $this->db
-			->where('id', $id_transaksi)
-			->get('transaksi')
+			->select(
+				'transaksi.*,
+				 customers.nama AS nama_customer, 
+				 customers.alamat AS alamat_customer, 
+				 customers.no_telp AS no_telp_customer , 
+				 ')
+			->from('transaksi')
+			->join('customers', 'customers.id = transaksi.customer_id', 'left')
+			->where('transaksi.id', $id_transaksi)
+			->get()
 			->row();
+
 
 		if (!$data['transaksi']) {
 			show_error('Transaksi tidak ditemukan');
