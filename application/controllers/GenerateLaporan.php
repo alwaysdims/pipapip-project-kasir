@@ -10,37 +10,27 @@ class GenerateLaporan extends CI_Controller
 
 	public function detailPenjualan($id_transaksi)
 	{
-		/* ===============================
-		TRANSAKSI
-		=============================== */
-		// Ambil data transaksi utama + customer + user
+		// 2. Ambil data transaksi + customer + user
 		$this->db->select('
-		transaksi.*,
-		customers.nama AS nama_customer,
-		customers.alamat AS alamat_customer,
-		customers.no_telp AS no_telp_customer,
-		customers.email AS email_customer,
-		users.username AS nama_user
+			transaksi.*,
+			customers.nama AS nama_customer,
+			customers.alamat AS alamat_customer,
+			customers.no_telp AS no_telp_customer,
+			users.username AS nama_user
 		');
 		$this->db->from('transaksi');
 		$this->db->join('customers', 'customers.id = transaksi.customer_id', 'left');
 		$this->db->join('users', 'users.id = transaksi.user_id', 'left');
 		$this->db->where('transaksi.id', $id_transaksi);
-
 		$data['transaksi'] = $this->db->get()->row();
-
 
 		if (!$data['transaksi']) {
 			show_error('Transaksi tidak ditemukan');
 		}
 
-		/* ===============================
-		DETAIL TRANSAKSI
-		detail_transaksi → bahan → satuan
-		=============================== */
+		// 3. Ambil Detail Transaksi
 		$this->db->select('
 			detail_transaksi.*,
-			bahan.kode_bahan,
 			bahan.nama AS nama_bahan,
 			satuan.nama AS nama_satuan
 		');
@@ -48,66 +38,43 @@ class GenerateLaporan extends CI_Controller
 		$this->db->join('bahan', 'bahan.id = detail_transaksi.bahan_id', 'left');
 		$this->db->join('satuan', 'satuan.id = bahan.satuan_id', 'left');
 		$this->db->where('detail_transaksi.transaksi_id', $id_transaksi);
+		$data['details'] = $this->db->get()->result();
 
-		$query = $this->db->get();
-		if (!$query) {
-			echo $this->db->error()['message'];
-			die;
-		}
-
-		$data['details'] = $query->result();
-
-		/* ===============================
-		LOAD VIEW → PDF
-		=============================== */
-		$html = $this->load->view(
-			'reports/laporan-detail_penjualan',
-			$data,
-			true
-		);
-
+		// 4. Generate PDF
+		$html = $this->load->view('reports/laporan-detail_penjualan', $data, true);
 		$this->pdfgenerator->generate(
 			$html,
-			'detail-penjualan-' . $data['transaksi']->kode_transaksi,
+			'Nota-' . $data['transaksi']->kode_transaksi,
 			'A4',
-			'landscape',
+			'portrait', // Diubah ke portrait agar lebih mirip nota di gambar
 			true
 		);
 	}
 
 	public function detailPenjualanB5($id_transaksi)
 	{
-		/* ===============================
-		TRANSAKSI
-		=============================== */
-		// Ambil data transaksi utama + customer + user
+
+		// 2. Ambil data transaksi + customer + user
 		$this->db->select('
-		transaksi.*,
-		customers.nama AS nama_customer,
-		customers.alamat AS alamat_customer,
-		customers.no_telp AS no_telp_customer,
-		customers.email AS email_customer,
-		users.username AS nama_user
+			transaksi.*,
+			customers.nama AS nama_customer,
+			customers.alamat AS alamat_customer,
+			customers.no_telp AS no_telp_customer,
+			users.username AS nama_user
 		');
 		$this->db->from('transaksi');
 		$this->db->join('customers', 'customers.id = transaksi.customer_id', 'left');
 		$this->db->join('users', 'users.id = transaksi.user_id', 'left');
 		$this->db->where('transaksi.id', $id_transaksi);
-
 		$data['transaksi'] = $this->db->get()->row();
-
 
 		if (!$data['transaksi']) {
 			show_error('Transaksi tidak ditemukan');
 		}
 
-		/* ===============================
-		DETAIL TRANSAKSI
-		detail_transaksi → bahan → satuan
-		=============================== */
+		// 3. Ambil Detail Transaksi
 		$this->db->select('
 			detail_transaksi.*,
-			bahan.kode_bahan,
 			bahan.nama AS nama_bahan,
 			satuan.nama AS nama_satuan
 		');
@@ -115,29 +82,15 @@ class GenerateLaporan extends CI_Controller
 		$this->db->join('bahan', 'bahan.id = detail_transaksi.bahan_id', 'left');
 		$this->db->join('satuan', 'satuan.id = bahan.satuan_id', 'left');
 		$this->db->where('detail_transaksi.transaksi_id', $id_transaksi);
+		$data['details'] = $this->db->get()->result();
 
-		$query = $this->db->get();
-		if (!$query) {
-			echo $this->db->error()['message'];
-			die;
-		}
-
-		$data['details'] = $query->result();
-
-		/* ===============================
-		LOAD VIEW → PDF
-		=============================== */
-		$html = $this->load->view(
-			'reports/laporan-detail_penjualan',
-			$data,
-			true
-		);
-
+		// 4. Generate PDF
+		$html = $this->load->view('reports/laporan-detail_penjualan', $data, true);
 		$this->pdfgenerator->generate(
 			$html,
-			'detail-penjualan-' . $data['transaksi']->kode_transaksi,
+			'Nota-' . $data['transaksi']->kode_transaksi,
 			'B5',
-			'landscape',
+			'portrait', // Diubah ke portrait agar lebih mirip nota di gambar
 			true
 		);
 	}
