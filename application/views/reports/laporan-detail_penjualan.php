@@ -181,14 +181,9 @@
                         <td class="line-bottom"><?= $tgl . ' ' . $bulan[$bln] . ' ' . $thn ?></td>
                     </tr>
                     <tr>
-                        <td>Tuan</td>
+                        <td>Tuan Toko</td>
                         <td>:</td>
                         <td class="line-bottom"><?= htmlspecialchars($transaksi->nama_customer) ?></td>
-                    </tr>
-                    <tr>
-                        <td>Toko</td>
-                        <td>:</td>
-                        <td class="line-bottom"><?= htmlspecialchars($transaksi->alamat_customer) ?></td>
                     </tr>
                     <tr>
                         <td colspan="3" style="font-weight:bold; padding-top: 10px; white-space: nowrap;">
