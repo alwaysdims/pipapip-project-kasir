@@ -28,7 +28,7 @@
         }
 
         .logo-img {
-            max-height: 90px;
+            max-height: 100px;
             width: auto;
             display: block;
         }
@@ -76,7 +76,7 @@
         /* Watermark Image */
         .watermark-logo {
             position: absolute;
-            top: 30%;
+            top: 35%;
             left: 50%;
             transform: translate(-50%, -50%);
             width: 300px;
@@ -143,56 +143,58 @@
 
 <body>
     <table class="header-table">
-        <tr>
-            <td class="logo-container">
-                <img src="<?= base_url('assets/images/logo.jpg') ?>" class="logo-img">
-            </td>
-            <td class="store-info">
-                <div class="store-box">
-                    <strong>SUPPLIER SAYUR, BUAH LOKAL MAUPUN IMPORT, DAGING SEGAR, DAN SEMBAKO</strong>
-                </div>
-                <div style="font-size: 10px; line-height: 1.3;">
-                    <strong style="font-size: 11px; display: block; margin-bottom: 2px;">Kauman Pasar Legi, Kastalan, Banjarsari, Surakarta</strong>
-                    <table style="font-size: 9px; border: none; border-collapse: collapse;">
-                        <tr>
-                            <td style="width: 48px; border: none; padding: 0;">Whatsapp</td>
-                            <td style="width: 8px; border: none; padding: 0;">:</td>
-                            <td style="border: none; padding: 0;">089652821177</td>
-                        </tr>
-                        <tr>
-                            <td style="border: none; padding: 0;">Email</td>
-                            <td style="border: none; padding: 0;">:</td>
-                            <td style="border: none; padding: 0;">amdgsuppliersolo@gmail.com</td>
-                        </tr>
-                    </table>
-                </div>
-            </td>
-            <td class="customer-info">
-                <table style="border-collapse: collapse;">
-                    <?php
-                        $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
-                        $tgl = date('d', strtotime($transaksi->tanggal));
-                        $bln = (int)date('m', strtotime($transaksi->tanggal));
-                        $thn = date('Y', strtotime($transaksi->tanggal));
-                    ?>
-                    <tr>
-                        <td style="width: 30px;">Tgl</td>
-                        <td style="width: 8px;">:</td>
-                        <td class="line-bottom"><?= $tgl . ' ' . $bulan[$bln] . ' ' . $thn ?></td>
-                    </tr>
-                    <tr>
-                        <td>Tuan Toko</td>
-                        <td>:</td>
-                        <td class="line-bottom"><?= htmlspecialchars($transaksi->nama_customer) ?></td>
-                    </tr>
-                    <tr>
-                        <td colspan="3" style="font-weight:bold; padding-top: 10px; white-space: nowrap;">
-                            NOTA NO : <span style="font-weight: normal; border-bottom: 1px dotted #000;"><?= $transaksi->kode_transaksi ?></span>
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+	<tr>
+    <td class="logo-container" style="vertical-align: top; padding: 0;">
+        <img src="<?= base_url('assets/images/logo.jpg') ?>" class="logo-img" style="display: block; margin: 0;">
+    </td>
+
+    <td class="store-info" style="vertical-align: top; padding: 0 15px;">
+        <div class="store-box" style="margin-top: 0; display: inline-block; vertical-align: top;">
+            <strong>SUPPLIER SAYUR, BUAH LOKAL MAUPUN IMPORT, DAGING SEGAR, DAN SEMBAKO</strong>
+        </div>
+        <div style="font-size: 10px; line-height: 1.3; margin-top: 5px;">
+            <strong style="font-size: 11px; display: block; margin-bottom: 2px;">Kauman Pasar Legi, Kastalan, Banjarsari, Surakarta</strong>
+            <table style="font-size: 9px; border: none; border-collapse: collapse; width: 100%;">
+                <tr>
+                    <td style="width: 48px; border: none; padding: 0; vertical-align: top;">Whatsapp</td>
+                    <td style="width: 8px; border: none; padding: 0; vertical-align: top;">:</td>
+                    <td style="border: none; padding: 0; vertical-align: top;">089652821177</td>
+                </tr>
+                <tr>
+                    <td style="border: none; padding: 0; vertical-align: top;">Email</td>
+                    <td style="border: none; padding: 0; vertical-align: top;">:</td>
+                    <td style="border: none; padding: 0; vertical-align: top;">amdgsuppliersolo@gmail.com</td>
+                </tr>
+            </table>
+        </div>
+    </td>
+
+    <td class="customer-info" style="vertical-align: top; padding: 0;">
+        <table style="border-collapse: collapse; width: 100%; margin: 0;">
+            <?php
+                $bulan = [1 => 'Januari', 'Februari', 'Maret', 'April', 'Mei', 'Juni', 'Juli', 'Agustus', 'September', 'Oktober', 'November', 'Desember'];
+                $tgl = date('d', strtotime($transaksi->tanggal));
+                $bln = (int)date('m', strtotime($transaksi->tanggal));
+                $thn = date('Y', strtotime($transaksi->tanggal));
+            ?>
+            <tr>
+                <td style="width: 30px; vertical-align: top; padding: 2px 0;">Tgl</td>
+                <td style="width: 8px; vertical-align: top; padding: 2px 0;">:</td>
+                <td class="line-bottom" style="vertical-align: top; padding: 2px 0;"><?= $tgl . ' ' . $bulan[$bln] . ' ' . $thn ?></td>
+            </tr>
+            <tr>
+                <td style="vertical-align: top; padding: 2px 0;">Tuan Toko</td>
+                <td style="vertical-align: top; padding: 2px 0;">:</td>
+                <td class="line-bottom" style="vertical-align: top; padding: 2px 0;"><?= htmlspecialchars($transaksi->nama_customer) ?></td>
+            </tr>
+            <tr>
+                <td colspan="3" style="font-weight:bold; padding-top: 10px; white-space: nowrap; vertical-align: top;">
+                    NOTA NO : <span style="font-weight: normal; border-bottom: 1px dotted #000;"><?= $transaksi->kode_transaksi ?></span>
+                </td>
+            </tr>
+        </table>
+    </td>
+</tr>
     </table>
 
     <!-- Container untuk watermark -->

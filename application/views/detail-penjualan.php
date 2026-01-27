@@ -8,9 +8,9 @@
 				class="btn btn-primary shadow-md mr-2" target="_blank">
 				Print nota
 			</a>
-			<a href="<?= base_url('GenerateLaporan/detailPenjualanB5/'.$transaksi->id) ?>"
+			<a href="<?= base_url('GenerateLaporan/detailPenjualanA5/'.$transaksi->id) ?>"
 				class="btn btn-primary shadow-md mr-2" target="_blank">
-				Print nota B5
+				Print nota A5
 			</a>
 			<a href="<?= base_url('GenerateLaporan/suratJalan/'.$transaksi->id) ?>"
 				class="btn btn-primary shadow-md mr-2" target="_blank">

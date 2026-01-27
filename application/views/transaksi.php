@@ -39,7 +39,7 @@
 							<div class="mt-2">
 								<label for="vertical-form-2" class="form-label">Jumlah</label>
 								<input id="vertical-form-2" type="number" class="form-control w-full" name="jumlah"
-									placeholder="Input jumlah">
+									placeholder="Input jumlah" step="any" inputmode="decimal">
 							</div>
 							<div class="mt-2">
 								<label for="deskripsi" class="form-label">Deskripsi</label>
@@ -111,7 +111,7 @@
 								<td class="whitespace-nowrap"><?= htmlspecialchars($row->nama_satuan) ?></td>
 								<td class="whitespace-nowrap" >
 									<input type="number" value="<?= $row->jumlah ?>"
-										class="form-control w-24" data-id="<?= $row->id ?>" min="1">
+										class="form-control w-24 jumlah-input" data-id="<?= $row->id ?>" min="0.001" step="any" inputmode="decimal">
 								</td>
 								<td class="whitespace-nowrap">
 									Rp <?= number_format($row->harga_jual * $row->jumlah, 0, ',', '.') ?>
@@ -175,12 +175,22 @@
 <script>
 	document.querySelectorAll('.jumlah-input').forEach(input => {
 		input.addEventListener('change', function () {
+			let nilai = parseFloat(this.value);
+
+			// Validasi: Jika kurang dari 0.01
+			if (nilai < 0.001 || isNaN(nilai)) {
+				alert("Jumlah minimal adalah 0.001!"); // Bisa ganti dengan SweetAlert agar lebih cantik
+				this.value = this.defaultValue; // Kembalikan ke nilai sebelumnya
+				return; // Hentikan eksekusi fetch
+			}
+
+			// Jika valid, jalankan fetch
 			fetch("<?= base_url('penjualan/updateJumlahTemp') ?>/" + this.dataset.id, {
 				method: "POST",
 				headers: {
 					"Content-Type": "application/x-www-form-urlencoded"
 				},
-				body: "jumlah=" + this.value
+				body: "jumlah=" + nilai
 			}).then(() => location.reload());
 		});
 	});

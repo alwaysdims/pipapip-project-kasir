@@ -51,7 +51,7 @@ class GenerateLaporan extends CI_Controller
 		);
 	}
 
-	public function detailPenjualanB5($id_transaksi)
+	public function detailPenjualanA5($id_transaksi)
 	{
 
 		// 2. Ambil data transaksi + customer + user
@@ -89,7 +89,7 @@ class GenerateLaporan extends CI_Controller
 		$this->pdfgenerator->generate(
 			$html,
 			'Nota-' . $data['transaksi']->kode_transaksi,
-			'B5',
+			'A5',
 			'portrait', // Diubah ke portrait agar lebih mirip nota di gambar
 			true
 		);

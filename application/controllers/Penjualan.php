@@ -96,7 +96,7 @@ class Penjualan extends CI_Controller {
 		$this->form_validation->set_rules('bahan_id', 'Bahan', 'required|integer');
 		$this->form_validation->set_rules('harga_beli', 'Harga Beli', 'required|numeric');
 		$this->form_validation->set_rules('harga_jual', 'Harga Jual', 'required|numeric');
-		$this->form_validation->set_rules('jumlah', 'Jumlah', 'required|integer|greater_than[0]');
+		$this->form_validation->set_rules('jumlah', 'Jumlah', 'required');
 
 		if ($this->form_validation->run() == FALSE) {
 			$this->session->set_flashdata('error', validation_errors());
@@ -109,7 +109,7 @@ class Penjualan extends CI_Controller {
 			'bahan_id'   => $this->input->post('bahan_id', TRUE),
 			'harga_beli' => $this->input->post('harga_beli', TRUE),
 			'harga_jual' => $this->input->post('harga_jual', TRUE),
-			'jumlah'     => $this->input->post('jumlah', TRUE),
+			'jumlah'     => $this->input->post('jumlah'),
 			'deskripsi'     => $this->input->post('deskripsi')
 		];
 
